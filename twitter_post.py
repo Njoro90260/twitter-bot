@@ -1,3 +1,4 @@
+import tweepy
 import schedule
 import time
 from twitter_auth import twitter_authenticaton
@@ -35,4 +36,25 @@ def schedule_tweets():
         time.sleep(60)
 
 # start scheduling
-schedule_tweets()
+# schedule_tweets()
+def get_trending_topics(woeid):
+    client = twitter_authenticaton()
+
+    # FEtch trending topics using the get_place_trends() method
+    try:
+        trends = client.get_place_trends(id=woeid)
+        if trends:
+            print(f"Trending in topics for WOEID {woeid}:")
+            for trend in trends[0]["trends"]:
+                print(f"- {trend['name']}")
+        else:
+            print(f"No trends available for WOEID {woeid}")
+    except Exception as e:
+        print(f"Error fetching trends: {e}")
+
+# My WOEID 
+nairobi_woeid = 1528488
+
+# Fetch trends
+get_trending_topics(nairobi_woeid)
+
