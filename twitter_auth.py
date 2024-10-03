@@ -16,4 +16,8 @@ def twitter_authenticaton():
         access_token_secret=access_token_secret
     )
 
-    return client
+    auth = tweepy.OAuthHandler(api_key, api_secret_key)
+    auth.set_access_token(access_token, access_token_secret)
+
+    api = tweepy.API(auth)
+    return api, client

@@ -38,11 +38,11 @@ def schedule_tweets():
 # start scheduling
 # schedule_tweets()
 def get_trending_topics(woeid):
-    client = twitter_authenticaton()
+    api, _ = twitter_authenticaton()
 
     # FEtch trending topics using the get_place_trends() method
     try:
-        trends = client.get_place_trends(id=woeid)
+        trends = api.get_place_trends(id=woeid)
         if trends:
             print(f"Trending in topics for WOEID {woeid}:")
             for trend in trends[0]["trends"]:
