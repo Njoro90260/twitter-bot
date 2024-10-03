@@ -72,30 +72,18 @@ def like_tweet(tweet_id):
 # tweet_id = ""
 # like_tweet(tweet_id)
 
-def serch_tweets(query, max_results=10):
-    api, _ = twitter_authenticaton()
-    try:
-        # Search for tweets
-        tweets = api.search_recent_tweets(query=query, max_results=max_results)
-
-        # loop through the tweets and print the ID and text
-        for tweet in tweets.data:
-            print(f"Tweet ID: {tweet.id}, Tweet Text: {tweet.text}")
-    except Exception as e:
-        print(f"An error occured: {e}")
-
-serch_tweets("python", max_results=5)
 
 def search_tweets_paginated(query, max_result=100):
-    api, _ = twitter_authenticaton()
+    client = tweepy.Client(bearer_token="AAAAAAAAAAAAAAAAAAAAAGtawAEAAAAArgNN6vVvMIUVxgNRqdUIabmzjrI%3Djyxr8Uy1snOdWcAnmzuinwA3txkWJtTRJx5LM1FQHF2sdwczCR")
     tweets = []
+    query = "python"
     try:
-        response = api.search_recent_tweets(query=query, max_result= max_result)
+        response = client.search_recent_tweets(query=query, max_result= max_result)
 
         tweets.extend(response.data)
 
         while 'next_token' in response.meta and len(tweets) < max_result:
-            response = api.search_recent_tweets(query=query, max_result=max_result)
+            response = client.search_recent_tweets(query=query, max_result=max_result)
             tweets.extend(response.data)
 
         return tweets
