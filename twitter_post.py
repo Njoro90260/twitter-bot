@@ -58,37 +58,21 @@ def get_trending_topics(woeid):
 # # Fetch trends
 # get_trending_topics(nairobi_woeid)
 
-
-def like_tweet(tweet_id):
-    # Get v2 client from the twitter_authentication funtion
-    _, client = twitter_authenticaton()
-
+def search_and_like(api, keyword, tweet_count=10):
     try:
-        response = client.like(tweet_id=tweet_id)
-        print(f"successfully liked tweet {tweet_id}")
+        # search for tweets containing keyword
+        tweets = tweepy.Cursor(api.search_tweets, q=keyword, lang="en").items(tweet_count)
+
+        # Like each tweets found
+        for tweet in tweets:
+            try:
+                print(f"Linking tweets by @{tweet.user.screen_name}: {tweet.text}")
+                tweet.favorite()
+            except tweepy.TweepError as e:
+                print(f"Error on liking tweet: {e}")
     except Exception as e:
-        print(f"Error liking tweet: {e}")
+        print(f"Error on search and like: {e}")
 
-# tweet_id = ""
-# like_tweet(tweet_id)
-
-
-def search_tweets_paginated(query, max_result=100):
-    client = tweepy.Client(bearer_token="AAAAAAAAAAAAAAAAAAAAAGtawAEAAAAArgNN6vVvMIUVxgNRqdUIabmzjrI%3Djyxr8Uy1snOdWcAnmzuinwA3txkWJtTRJx5LM1FQHF2sdwczCR")
-    tweets = []
-    query = "python"
-    try:
-        response = client.search_recent_tweets(query=query, max_result= max_result)
-
-        tweets.extend(response.data)
-
-        while 'next_token' in response.meta and len(tweets) < max_result:
-            response = client.search_recent_tweets(query=query, max_result=max_result)
-            tweets.extend(response.data)
-
-        return tweets
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return[]
-    
-all_tweets = search_tweets_paginated("python, max_results=200")
+if __name__ == "__main__":
+    api, _ = twitter_authenticaton()
+    search_and_like(api, keyword="pizzas", tweet_count=5)
