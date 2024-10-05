@@ -1,13 +1,18 @@
 import tweepy
+from dotenv import load_dotenv
+import os
 
-def twitter_authenticaton():
-    api_key = "EU2h7fBeycRWC6b9SmbO80C91"
-    api_secret_key = "0PfB3DhOP5nih9jIVuDemi3l0GRRGSoYZi4qOEKQxqdJeit30M"
-    access_token = "1659190073626091525-yE8TubUneFbl2KCZzLIGrcAcPYGmSY"
-    access_token_secret = "zywTHfMn1YAetKZ69zzAFtp2ldjzeSOJKgHq4of85Fu5g"
-    bearer_token = "AAAAAAAAAAAAAAAAAAAAAGtawAEAAAAArgNN6vVvMIUVxgNRqdUIabmzjrI%3Djyxr8Uy1snOdWcAnmzuinwA3txkWJtTRJx5LM1FQHF2sdwczCR"
+# Load environment variables from the .env file
+load_dotenv()
+
+def twitter_authentication():
+    api_key = os.getenv('API_KEY')
+    api_secret_key = os.getenv('API_KEY_SECRET')
+    access_token = os.getenv('ACCESS_TOKEN')
+    access_token_secret = os.getenv('ACCESS_TOKEN_SECRET')
+    bearer_token = os.getenv('BEARER_TOKEN')
     
-    # Creating the client object for v2 requests with OAuth1.1 credentials
+    # Creating the client object for v2 requests using OAuth 2.0 Bearer Token
     client = tweepy.Client(
         bearer_token=bearer_token,
         consumer_key=api_key,
@@ -16,8 +21,20 @@ def twitter_authenticaton():
         access_token_secret=access_token_secret
     )
 
+    # Creating the API object for v1.1 requests using OAuth 1.1
     auth = tweepy.OAuthHandler(api_key, api_secret_key)
     auth.set_access_token(access_token, access_token_secret)
 
-    api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+    api = tweepy.API(auth, wait_on_rate_limit=True)
+
+    # Verify the authentication
+    try:
+        api.verify_credentials()
+        print("Authentication successful!")
+    except tweepy.TweepError as e:
+        print(f"Error during authentication: {e}")
+    
     return api, client
+
+
+# twitter_authentication()

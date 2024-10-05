@@ -58,10 +58,10 @@ def get_trending_topics(woeid):
 # # Fetch trends
 # get_trending_topics(nairobi_woeid)
 
-def search_and_like(api, keyword, tweet_count=10):
+def search_and_like(api, query, tweet_count=10):
     try:
         # search for tweets containing keyword
-        tweets = tweepy.Cursor(api.search_tweets, q=keyword, lang="en").items(tweet_count)
+        tweets = tweepy.Cursor(api.search_tweets, q=query, lang="en").items(tweet_count)
 
         # Like each tweets found
         for tweet in tweets:
@@ -75,4 +75,4 @@ def search_and_like(api, keyword, tweet_count=10):
 
 if __name__ == "__main__":
     api, _ = twitter_authenticaton()
-    search_and_like(api, keyword="pizzas", tweet_count=5)
+    search_and_like(api, query="pizzas", tweet_count=5)
