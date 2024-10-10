@@ -64,5 +64,3 @@ The bot uses the **Twitter API** to search for tweets containing specific keywor
 ```bash
 
 Feel free to modify the repository URL and any specific project details. Let me know if you'd like further adjustments!
-
-  
